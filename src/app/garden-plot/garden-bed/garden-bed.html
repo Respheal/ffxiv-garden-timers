@@ -1,0 +1,39 @@
+<div class="garden-bed">
+  @if (this.crop().apiID > 0) {
+    <img
+      [src]="`https://v2.xivapi.com/api/asset?path=${this.crop().iconPath}&format=png`"
+      title="{{ cropData()?.name }}"
+      alt="{{ cropData()?.name }}"
+    />
+    <div class="icons">
+      <a [href]="`https://universalis.app/market/${this.crop().apiID}`" title="Universalis">
+        <img src="/universalis.png" alt="Universalis" />
+      </a>
+      <a [href]="`https://ffxivteamcraft.com/db/en/item/${this.crop().apiID}`" title="Teamcraft">
+        <img src="/teamcraft.png" alt="Teamcraft" />
+      </a>
+      <a [href]="`https://www.ffxivgardening.com/seed-details.php?SeedID=${this.cropData()?.ffxivgId}`" title="FFXIV Gardening">
+        <img src="/ffxiv-gardening.ico" alt="FFXIV Gardening" />
+      </a>
+    </div>
+    <div style="margin: 0.5rem 0">
+      Harvest <span title=" {{ harvestTime() | date: 'short' }}">{{ formatRelativeTime(harvestTime()) }}</span>
+      @if (wiltTime()) {
+        <br />Wilts <span title=" {{ wiltTime() | date: 'short' }}">{{ formatRelativeTime(wiltTime()) }}</span>
+      }
+    </div>
+    <div class="care-buttons">
+      <button (click)="waterCrop()">Water</button>
+      <button (click)="fertilizeCrop()" [disabled]="!canFertilize()">Fertilize</button>
+      <button (click)="clearCrop()">Clear</button>
+    </div>
+  } @else {
+    <select [value]="crop().apiID" (change)="selectCrop($event)">
+      @for (APICrop of apiCrops; track $index) {
+        @if (APICrop.apiID >= 0) {
+          <option [value]="APICrop.apiID">{{ APICrop.name }}</option>
+        }
+      }
+    </select>
+  }
+</div>

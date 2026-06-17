@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="plot-button-container">
+    <div><button (click)="exportGarden()">Backup Garden</button></div>
+    <div><input type="file" id="fileimport" style="display: none" (change)="importGarden($event)" /></div>
+    <input type="button" id="loadFileXml" value="Import Garden" onclick="document.getElementById('fileimport').click()" />
+  </div>
+  <div class="plot-button-container">
+    <button (click)="this.gardenService.addPlot(1)">Add 1x1 Plot</button>
+    <button (click)="this.gardenService.addPlot(4)">Add 2x2 Plot</button>
+    <button (click)="this.gardenService.addPlot(6)">Add 2x3 Plot</button>
+    <button (click)="this.gardenService.addPlot(8)">Add 3x3 Plot</button>
+  </div>
+
+  <div class="garden">
+    @for (plot of this.gardenService.garden().plots; track plot.plotID) {
+      <div class="garden-plot garden-plot-{{ plot.size }}"><app-garden-plot [plot]="plot"></app-garden-plot></div>
+    }
+  </div>
+</div>

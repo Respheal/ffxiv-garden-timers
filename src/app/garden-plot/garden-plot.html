@@ -1,0 +1,16 @@
+@if (this.editingName()) {
+  <input type="text" [value]="plot().name" (blur)="updatePlotName($event)" (keydown.enter)="updatePlotName($event); editingName.set(false)" />
+} @else {
+  <h2 (click)="editingName.set(true)">{{ plot().name }}</h2>
+}
+
+<div class="beds-grid beds-grid-{{ plot().size }}">
+  @for (crop of plot().crops; track $index; let slotIndex = $index) {
+    @if (plot().size === 8 && crop.apiID === -1) {
+      <div></div>
+    } @else {
+      <div><app-garden-bed [crop]="crop" [plotID]="plot().plotID" [cropIndex]="slotIndex" [currentTime]="currentTime()"></app-garden-bed></div>
+    }
+  }
+</div>
+<button (click)="this.gardenService.removePlot(plot().plotID)" style="margin-top: 0.5rem">Remove Plot</button>

@@ -1,0 +1,29 @@
+.beds-grid {
+  display: grid;
+}
+
+.beds-grid div {
+  background-color: #f1f1f1;
+  border: 1px solid black;
+  text-align: center;
+  margin: 0.25rem;
+}
+
+.beds-grid-1 {
+  grid-template-columns: auto;
+}
+
+.beds-grid-4 {
+  grid-template-columns: auto auto;
+}
+
+.beds-grid-6,
+.beds-grid-8 {
+  grid-template-columns: auto auto auto;
+}
+
+@media (max-width: 768px) {
+  .beds-grid div {
+    margin: 0.125rem;
+  }
+}

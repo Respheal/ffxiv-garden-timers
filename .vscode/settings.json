@@ -1,0 +1,6 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.printWidth": 90,
+  "editor.rulers": [90],
+  "python-envs.defaultPackageManager": "ms-python.python:pip"
+}
