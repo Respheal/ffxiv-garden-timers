@@ -19,7 +19,13 @@
     <div style="margin: 0.5rem 0">
       Harvest <span title=" {{ harvestTime() | date: 'short' }}">{{ formatRelativeTime(harvestTime()) }}</span>
       @if (wiltTime()) {
-        <br />Wilts <span title=" {{ wiltTime() | date: 'short' }}">{{ formatRelativeTime(wiltTime()) }}</span>
+        @if (isWilted() && deadTime()) {
+          <br /><span style="color: red">
+            Dies <span title=" {{ deadTime() | date: 'short' }}">{{ formatRelativeTime(deadTime()) }}</span>
+          </span>
+        } @else {
+          <br />Wilts <span title=" {{ wiltTime() | date: 'short' }}">{{ formatRelativeTime(wiltTime()) }}</span>
+        }
       }
     </div>
     <div class="care-buttons">

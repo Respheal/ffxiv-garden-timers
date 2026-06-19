@@ -68,6 +68,21 @@ export class GardenBed {
     return computedWiltTime;
   });
 
+  isWilted = computed(() => {
+    if (!this.wiltTime()) return false;
+    return this.currentTime() > this.wiltTime()!.getTime();
+  });
+
+  deadTime = computed(() => {
+    // Crops die 24 hours after wilting, unless they're harvestable before then
+    if (
+      this.wiltTime() === null ||
+      (this.harvestTime() && this.wiltTime()! > this.harvestTime()!)
+    )
+      return null;
+    return new Date(this.wiltTime()!.getTime() + 24 * 60 * 60 * 1000);
+  });
+
   fertilizeCrop() {
     this.gardenService.fertilizeCrop(
       this.plotID(),
