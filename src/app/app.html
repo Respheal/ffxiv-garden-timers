@@ -1,8 +1,10 @@
 <div class="container">
   <div class="plot-button-container">
-    <div><button (click)="exportGarden()">Backup Garden</button></div>
-    <div><input type="file" id="fileimport" style="display: none" (change)="importGarden($event)" /></div>
+    <button (click)="exportGarden()">Backup Garden</button>
+    <input type="file" id="fileimport" style="display: none" (change)="importGarden($event)" />
     <input type="button" id="loadFileXml" value="Import Garden" onclick="document.getElementById('fileimport').click()" />
+    <button (click)="this.gardenService.waterEntireGarden()">Water All</button>
+    <button (click)="this.gardenService.fertilizeEntireGarden()">Fertilize All</button>
   </div>
   <div class="plot-button-container">
     <button (click)="this.gardenService.addPlot(1)">Add 1x1 Plot</button>

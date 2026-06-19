@@ -3,6 +3,10 @@
 } @else {
   <h2 (click)="editingName.set(true)">{{ plot().name }}</h2>
 }
+<div class="plot-button-container">
+  <button (click)="this.gardenService.waterEntirePlot(plot())">Water All</button>
+  <button (click)="this.gardenService.fertilizeEntirePlot(plot())">Fertilize All</button>
+</div>
 
 <div class="beds-grid beds-grid-{{ plot().size }}">
   @for (crop of plot().crops; track $index; let slotIndex = $index) {

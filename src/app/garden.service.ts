@@ -69,10 +69,34 @@ export class GardenService {
     this.updateCrop(plotID, cropIndex, { lastWaterTime: new Date().getTime() });
   }
 
+  waterEntirePlot(plot: Plot) {
+    plot.crops.forEach((_, index) => {
+      this.waterCrop(plot.plotID, index);
+    });
+  }
+
+  waterEntireGarden() {
+    this.garden().plots.forEach((plot) => {
+      this.waterEntirePlot(plot);
+    });
+  }
+
   fertilizeCrop(plotID: number, cropIndex: number, fertCount: number) {
     this.updateCrop(plotID, cropIndex, {
       fertilizeCount: fertCount + 1,
       lastFertilizeTime: new Date().getTime(),
+    });
+  }
+
+  fertilizeEntirePlot(plot: Plot) {
+    plot.crops.forEach((crop, index) => {
+      this.fertilizeCrop(plot.plotID, index, crop.fertilizeCount || 0);
+    });
+  }
+
+  fertilizeEntireGarden() {
+    this.garden().plots.forEach((plot) => {
+      this.fertilizeEntirePlot(plot);
     });
   }
 
