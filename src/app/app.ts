@@ -1,17 +1,19 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, viewChild } from '@angular/core';
 
 import { GardenPlot } from './garden-plot/garden-plot';
+import { FavoritesManager } from './favorites-manager/favorites-manager';
 import { GardenService } from './garden.service';
 import { type Garden } from './garden.interfaces';
 
 @Component({
   selector: 'app-root',
-  imports: [GardenPlot],
+  imports: [GardenPlot, FavoritesManager],
   templateUrl: './app.html',
   styleUrls: ['./app.css'],
 })
 export class App {
   protected gardenService = inject(GardenService);
+  favoritesManager = viewChild.required(FavoritesManager);
 
   exportGarden() {
     // Create a JSON file from the garden data and trigger a download

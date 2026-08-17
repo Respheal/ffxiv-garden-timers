@@ -16,14 +16,29 @@ import { type APICrop, type Crop } from '../../garden.interfaces';
 export class GardenBed {
   private gardenService = inject(GardenService);
   crop = input.required<Crop>();
-  apiCrops = APICrops;
   plotID = input.required<number>();
   cropIndex = input.required<number>();
   currentTime = input.required<number>();
 
+  placeholderCrop = APICrops.find((apiCrop) => apiCrop.apiID === 0);
+
+  favoriteCrops = computed(() => {
+    const favoriteCropIDs = this.gardenService.favoriteCropIDs();
+    return APICrops.filter(
+      (apiCrop) => apiCrop.apiID > 0 && favoriteCropIDs.includes(apiCrop.apiID),
+    );
+  });
+
+  otherCrops = computed(() => {
+    const favoriteCropIDs = this.gardenService.favoriteCropIDs();
+    return APICrops.filter(
+      (apiCrop) => apiCrop.apiID > 0 && !favoriteCropIDs.includes(apiCrop.apiID),
+    );
+  });
+
   cropData = computed(() => {
     // Collect the growth and wilt times for the crop
-    return this.apiCrops.find((apiCrop: APICrop) => apiCrop.apiID === this.crop().apiID);
+    return APICrops.find((apiCrop: APICrop) => apiCrop.apiID === this.crop().apiID);
   });
 
   canFertilize = computed(() => {
