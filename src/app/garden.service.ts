@@ -6,11 +6,34 @@ import { Garden, Plot, CropUpdate, XIVAPIItem } from './garden.interfaces';
 @Injectable({ providedIn: 'root' })
 export class GardenService {
   garden = signal<Garden>(this.loadGarden());
+  private suppressNextPersist = false;
 
   constructor() {
     effect(() => {
-      localStorage.setItem('ffxiv-garden', JSON.stringify(this.garden()));
+      const garden = this.garden();
+      if (this.suppressNextPersist) {
+        // We just resynced from storage,
+        // so we don't need to store what we just retrieved
+        this.suppressNextPersist = false;
+        return;
+      }
+      localStorage.setItem('ffxiv-garden', JSON.stringify(garden));
     });
+
+    // Refresh the garden state when the user switches tabs or windows,
+    // to ensure that the state is consistent across multiple tabs
+    window.addEventListener('storage', (event) => {
+      if (event.key === 'ffxiv-garden') this.resyncFromStorage();
+    });
+    window.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') this.resyncFromStorage();
+    });
+    window.addEventListener('focus', () => this.resyncFromStorage());
+  }
+
+  private resyncFromStorage() {
+    this.suppressNextPersist = true;
+    this.garden.set(this.loadGarden());
   }
 
   private loadGarden(): Garden {
@@ -106,6 +129,9 @@ export class GardenService {
         apiID: newApiID,
         iconPath: iconPath,
         plantedTime: new Date().getTime(),
+        fertilizeCount: 0,
+        lastFertilizeTime: null,
+        lastWaterTime: null,
       });
     });
   }
