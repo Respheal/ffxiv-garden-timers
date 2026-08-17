@@ -6,6 +6,7 @@ import { Garden, Plot, CropUpdate, XIVAPIItem } from './garden.interfaces';
 @Injectable({ providedIn: 'root' })
 export class GardenService {
   garden = signal<Garden>(this.loadGarden());
+  favoriteCropIDs = signal<number[]>(this.loadFavoriteCropIDs());
   private suppressNextPersist = false;
 
   constructor() {
@@ -18,6 +19,10 @@ export class GardenService {
         return;
       }
       localStorage.setItem('ffxiv-garden', JSON.stringify(garden));
+    });
+
+    effect(() => {
+      localStorage.setItem('ffxiv-garden-favorites', JSON.stringify(this.favoriteCropIDs()));
     });
 
     // Refresh the garden state when the user switches tabs or windows,
@@ -40,6 +45,24 @@ export class GardenService {
     const gardenData = localStorage.getItem('ffxiv-garden');
     if (gardenData) return JSON.parse(gardenData) as Garden;
     return { plots: [] };
+  }
+
+  private loadFavoriteCropIDs(): number[] {
+    const favoritesData = localStorage.getItem('ffxiv-garden-favorites');
+    if (favoritesData) return JSON.parse(favoritesData) as number[];
+    return [];
+  }
+
+  isFavoriteCrop(apiID: number): boolean {
+    return this.favoriteCropIDs().includes(apiID);
+  }
+
+  toggleFavoriteCrop(apiID: number) {
+    this.favoriteCropIDs.update((favorites) =>
+      favorites.includes(apiID)
+        ? favorites.filter((id) => id !== apiID)
+        : [...favorites, apiID],
+    );
   }
 
   initializePlot(plotID: number, size: 1 | 4 | 6 | 8): Plot {

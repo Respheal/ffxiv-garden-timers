@@ -5,7 +5,9 @@
     <input type="button" id="loadFileXml" value="Import Garden" onclick="document.getElementById('fileimport').click()" />
     <button (click)="this.gardenService.waterEntireGarden()">Water All</button>
     <button (click)="this.gardenService.fertilizeEntireGarden()">Fertilize All</button>
+    <button (click)="favoritesManager().open()">Manage Favorites</button>
   </div>
+  <app-favorites-manager></app-favorites-manager>
   <div class="plot-button-container">
     <button (click)="this.gardenService.addPlot(1)">Add 1x1 Plot</button>
     <button (click)="this.gardenService.addPlot(4)">Add 2x2 Plot</button>

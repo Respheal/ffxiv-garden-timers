@@ -35,10 +35,17 @@
     </div>
   } @else {
     <select [value]="crop().apiID" (change)="selectCrop($event)">
-      @for (APICrop of apiCrops; track $index) {
-        @if (APICrop.apiID >= 0) {
-          <option [value]="APICrop.apiID">{{ APICrop.name }}</option>
-        }
+      @if (placeholderCrop) {
+        <option [value]="placeholderCrop.apiID">{{ placeholderCrop.name }}</option>
+      }
+      @for (apiCrop of favoriteCrops(); track apiCrop.apiID) {
+        <option [value]="apiCrop.apiID">★ {{ apiCrop.name }}</option>
+      }
+      @if (favoriteCrops().length > 0) {
+        <option disabled>──────────</option>
+      }
+      @for (apiCrop of otherCrops(); track apiCrop.apiID) {
+        <option [value]="apiCrop.apiID">{{ apiCrop.name }}</option>
       }
     </select>
   }

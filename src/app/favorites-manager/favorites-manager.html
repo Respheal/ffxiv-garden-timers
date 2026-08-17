@@ -1,0 +1,20 @@
+@if (isOpen()) {
+  <div class="favorites-overlay" (click)="close()">
+    <div class="favorites-panel" (click)="$event.stopPropagation()">
+      <div class="favorites-header">
+        <h2>Manage Favorite Crops</h2>
+        <button (click)="close()">Close</button>
+      </div>
+      <ul class="favorites-list">
+        @for (apiCrop of apiCrops; track apiCrop.apiID) {
+          <li>
+            <label>
+              <input type="checkbox" [checked]="gardenService.isFavoriteCrop(apiCrop.apiID)" (change)="toggleFavorite(apiCrop.apiID)" />
+              {{ apiCrop.name }}
+            </label>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+}
